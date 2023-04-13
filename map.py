@@ -1,13 +1,15 @@
 import random
 import math
+import simulation
 
 from cell import Cell
 
 
 class Map:
 
-  def __init__(self):
+  def __init__(self, simulation):
     self.cells = []
+    self.simulation = simulation
 
   def generate(self, N):
     self.cells = []
@@ -15,6 +17,7 @@ class Map:
     while i < (N * N):
       self.cells.append(Cell())
       i += 1
+    self.simulation.log.write("map generated")
 
   def get_cell(self, x, y):
     return self.cells[self.get_index(x, y)]
@@ -29,6 +32,7 @@ class Map:
     N = self.get_length()
     if x > N or x < 1 or y > N or y < 1:
       print("ERROR: (x,y) coordinates outside the map boundaries!")
+      self.simulation.log.write("ERROR: attempt to get index out side of map bounds: {}" .format(ans))
     return (x - 1) * N + (y - 1)
 
   def random_xy_zero(self):
@@ -45,6 +49,7 @@ class Map:
 
     if not found:
       print("ERROR: No empty cells available!")
+      self.simulation.log.write("ERROR: Attempt to add agent, no empty cells available: {}" .format(ans))
       return None
 
     x = random.randint(1, N)
